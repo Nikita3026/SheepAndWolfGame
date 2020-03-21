@@ -13,7 +13,13 @@
 <body>
     <div id="particles-js"></div>
     <canvas id="game" width="1024px" height="704px"></canvas>
-
+    <dialog class="dialogWindow">
+        <p>Выберите уровень сложности:</p>
+        <label for="easy">Легкий</label><input type="checkbox" id="easy" checked><br>
+        <label for="medium">Средний</label><input type="checkbox" id="medium"><br>
+        <label for="hard">Сложный</label><input type="checkbox" id="hard"><br>
+        <button class="buttonClose">OK</button>
+    </dialog>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js" defer></script>
     <script src="script/particles.js" defer></script>

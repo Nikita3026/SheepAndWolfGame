@@ -9,6 +9,8 @@ const maxAmountOfSheeps = 7;
 
 let arrayOfSheeps = [];
 
+let timeOfGame = 90000;
+
 
 class sheep {
     _isAlive = true;
@@ -161,18 +163,9 @@ class sheep {
 
 
     collisionOfSheeps(obj1) {
-        /* let RandomNumbeOfSheep = Math.floor(Math.random() * 99 + 1);
-        let newSheep; */
-        /* window["newSheep" + RandomNumbeOfSheep] */
-        /*  arrayOfSheeps[arrayOfSheeps.length] */
         let newSheep = new sheep();
         let tempDestination;
-        /*  newSheep._x = this.getX;
-         newSheep._y = this.getY; */
         newSheep.RandomiseDestination();
-        /*   arrayOfSheeps[arrayOfSheeps.length - 1].setX = this.getX;
-          arrayOfSheeps[arrayOfSheeps.length - 1].setY = this.getY;
-          arrayOfSheeps[arrayOfSheeps.length - 1].RandomiseDestination(); */
         while (arrayOfSheeps[arrayOfSheeps.length - 1].getDestination == this.getDestination ||
             arrayOfSheeps[arrayOfSheeps.length - 1].getDestination == obj1.getDestination)
             arrayOfSheeps[arrayOfSheeps.length - 1].RandomiseDestination();
@@ -224,15 +217,43 @@ function direction(event) {
     else if (event.keyCode == 83) dir = "down";
 }
 
+const dialog = document.querySelector(".dialogWindow");
+const easy = document.querySelector("#easy");
+const medium = document.querySelector("#medium");
+const hard = document.querySelector("#hard");
+const buttonClose = document.querySelector(".buttonClose");
 
+let eatAudio = new Audio();
+eatAudio.src = "audio/Amm.mp3";
 
+let fightAudio = new Audio();
+fightAudio.src = "audio/fight.mp3";
 
+let finishHer = new Audio();
+finishHer.src = "audio/finishHer.mp3";
 
+let gameOver = new Audio();
+gameOver.src = "audio/over.mp3";
 
+dialog.showModal();
+
+buttonClose.addEventListener("click", function() {
+    event.preventDefault();
+    if (medium.checked) timeOfGame = 60000;
+    if (hard.checked) timeOfGame = 30000;
+    dialog.close();
+})
 
 
 let destinationOfSheep;
 let counterOfSpawnCheck = 1;
+let timeOfStart;
+let counterOfFightSound = 1;
+let counterOfGameOverSound = 1;
+let game;
+
+
+
 
 
 let firstSheep = new sheep();
@@ -242,6 +263,7 @@ let wolf = new hunter();
 
 
 function drawGame() {
+    /*   clearTimeout(timeForChoose); */
     if (counterOfSpawnCheck == 1) {
         while (firstSheep.checkCollisionsBetweenObjects(secondSheep) || secondSheep.checkCollisionsBetweenObjects(thirdSheep) ||
             firstSheep.checkCollisionsBetweenObjects(thirdSheep)) {
@@ -250,6 +272,10 @@ function drawGame() {
             thirdSheep.changeCoordinates();
         }
         counterOfSpawnCheck--;
+    }
+    if (counterOfFightSound == 1) {
+        fightAudio.play();
+        counterOfFightSound--;
     }
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, 1024, 704);
@@ -260,19 +286,47 @@ function drawGame() {
     ctx.fillText("Sheeps Alive:", box * 25.2, box * 2);
     ctx.font = "34px 'VT323', monospace";
     ctx.fillText(counterOfAliveSheeps, box * 30, box * 2);
+    ctx.font = "27px 'VT323', monospace";
+    ctx.fillText("Time Remaining:", box * 1, box * 2);
+    ctx.font = "34px 'VT323', monospace";
+    ctx.fillText(Math.floor(((timeOfStart - Date.now()) / 1000)), box * 6.5, box * 2);
 
-    if (counterOfAliveSheeps == 0) {
+
+    if ((timeOfStart - Date.now()) <= 0) {
+        if (counterOfGameOverSound == 1) {
+            gameOver.play();
+            counterOfGameOverSound--;
+        }
         clearInterval(game);
         ctx.fillStyle = "#000000";
         ctx.font = "100px 'VT323', monospace";
         ctx.fillText("GAME OVER", box * 10.5, box * 11)
+        ctx.font = "50px 'VT323', monospace";
+        ctx.fillText("You lose!", box * 13.5, box * 12.5)
+    }
+
+
+    if (counterOfAliveSheeps == 0) {
+        if (counterOfGameOverSound == 1) {
+            gameOver.play();
+            counterOfGameOverSound--;
+        }
+        clearInterval(game);
+        ctx.fillStyle = "#000000";
+        ctx.font = "100px 'VT323', monospace";
+        ctx.fillText("GAME OVER", box * 10.5, box * 11)
+        ctx.font = "50px 'VT323', monospace";
+        ctx.fillText("You win!", box * 13.5, box * 12.5)
     }
 
     for (let i = 0; i < arrayOfSheeps.length; i++) {
         if (arrayOfSheeps[i].checkCollisionsBetweenObjects(wolf)) {
             arrayOfSheeps[i].isSheepAlive = false;
+            eatAudio.play();
             counterOfAliveSheeps--;
-            arrayOfSheeps[i].setX = (-box * 2);
+            arrayOfSheeps.splice(i, 1);
+            if (counterOfAliveSheeps == 1) finishHer.play();
+            /* arrayOfSheeps[i].setX = (-box * 2); */
         } else {
             if (arrayOfSheeps[i].isSheepAlive !== false) {
                 arrayOfSheeps[i].changeSheepDestination();
@@ -322,7 +376,9 @@ function drawGame() {
 }
 
 
+timeOfStart = Date.now() + timeOfGame;
 
-
-
-let game = setInterval(drawGame, 110);
+setTimeout(() => {
+    dialog.close();
+    game = setInterval(drawGame, 110);
+}, 5000);
