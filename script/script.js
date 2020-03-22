@@ -9,7 +9,7 @@ const maxAmountOfSheeps = 7;
 
 let arrayOfSheeps = [];
 
-let timeOfGame = 90000;
+let timeOfGame;
 
 
 class sheep {
@@ -240,7 +240,8 @@ dialog.showModal();
 buttonClose.addEventListener("click", function() {
     event.preventDefault();
     if (medium.checked) timeOfGame = 60000;
-    if (hard.checked) timeOfGame = 30000;
+    else if (hard.checked) timeOfGame = 30000;
+    else timeOfGame = 90000;
     dialog.close();
 })
 
@@ -326,7 +327,6 @@ function drawGame() {
             counterOfAliveSheeps--;
             arrayOfSheeps.splice(i, 1);
             if (counterOfAliveSheeps == 1) finishHer.play();
-            /* arrayOfSheeps[i].setX = (-box * 2); */
         } else {
             if (arrayOfSheeps[i].isSheepAlive !== false) {
                 arrayOfSheeps[i].changeSheepDestination();
@@ -376,9 +376,13 @@ function drawGame() {
 }
 
 
-timeOfStart = Date.now() + timeOfGame;
 
-setTimeout(() => {
+
+let start = setTimeout(() => {
     dialog.close();
+    if (medium.checked) timeOfGame = 60000;
+    else if (hard.checked) timeOfGame = 30000;
+    else timeOfGame = 90000;
+    timeOfStart = Date.now() + timeOfGame;
     game = setInterval(drawGame, 110);
 }, 5000);
