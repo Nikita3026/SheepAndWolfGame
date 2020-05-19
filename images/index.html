@@ -8,17 +8,16 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/style.css'>
     <link href="https://fonts.googleapis.com/css?family=VT323&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@500&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div id="particles-js"></div>
-    <canvas id="game" width="800px" height="704px"></canvas>
+    <canvas id="game" width="1024px" height="704px"></canvas>
     <dialog class="dialogWindow">
         <p>Выберите уровень сложности:</p>
-        <label for="easy">Легкий</label><input type="radio" name="level" id="easy" checked><br>
-        <label for="medium">Средний</label><input type="radio" name="level" id="medium"><br>
-        <label for="hard">Сложный</label><input type="radio" name="level" id="hard"><br>
+        <label for="easy">Легкий</label><input type="checkbox" id="easy" checked><br>
+        <label for="medium">Средний</label><input type="checkbox" id="medium"><br>
+        <label for="hard">Сложный</label><input type="checkbox" id="hard"><br>
         <button class="buttonClose">OK</button>
     </dialog>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer></script>
