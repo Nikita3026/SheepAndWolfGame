@@ -65,67 +65,67 @@ class sheep {
         this._y = Math.floor(Math.random() * 22) * box;
     }
     changeSheepDestination() {
-        if (this._destinationOfSheep == "up-left") {
+        if (this._destinationOfSheep === "up-left") {
             this.setY = (this.getY - box);
             this.setX = (this.getX - box);
         }
-        if (this._destinationOfSheep == "up-right") {
+        if (this._destinationOfSheep === "up-right") {
             this.setY = (this.getY - box);
             this.setX = (this.getX + box);
         }
-        if (this._destinationOfSheep == "down-left") {
+        if (this._destinationOfSheep === "down-left") {
             this.setY = (this.getY + box);
             this.setX = (this.getX - box);
         }
-        if (this._destinationOfSheep == "down-right") {
+        if (this._destinationOfSheep === "down-right") {
             this.setY = (this.getY + box);
             this.setX = (this.getX + box);
         }
     }
     checkCollisionsWithEdges() {
         if (this.getX < 0) {
-            if (this._destinationOfSheep == "up-left") {
+            if (this._destinationOfSheep === "up-left") {
                 this._destinationOfSheep = "up-right";
                 this.setX = (this.getX + box);
                 this.setY = (this.getY - box);
             }
-            if (this._destinationOfSheep == "down-left") {
+            if (this._destinationOfSheep === "down-left") {
                 this._destinationOfSheep = "down-right";
                 this.setX = (this.getX + box);
                 this.setY = (this.getY + box);
             }
         }
         if (this.getX > 24 * box) {
-            if (this._destinationOfSheep == "down-right") {
+            if (this._destinationOfSheep === "down-right") {
                 this._destinationOfSheep = "down-left";
                 this.setX = (this.getX - box);
                 this.setY = (this.getY + box);
             }
-            if (this._destinationOfSheep == "up-right") {
+            if (this._destinationOfSheep === "up-right") {
                 this._destinationOfSheep = "up-left";
                 this.setX = (this.getX - box);
                 this.setY = (this.getY - box);
             }
         }
         if (this.getY < 0) {
-            if (this._destinationOfSheep == "up-left") {
+            if (this._destinationOfSheep === "up-left") {
                 this._destinationOfSheep = "down-left";
                 this.setX = (this.getX - box);
                 this.setY = (this.getY + box);
             }
-            if (this._destinationOfSheep == "up-right") {
+            if (this._destinationOfSheep === "up-right") {
                 this._destinationOfSheep = "down-right";
                 this.setX = (this.getX + box);
                 this.setY = (this.getY + box);
             }
         }
         if (this.getY > 20 * box) {
-            if (this._destinationOfSheep == "down-left") {
+            if (this._destinationOfSheep === "down-left") {
                 this._destinationOfSheep = "up-left";
                 this.setX = (this.getX - box);
                 this.setY = (this.getY - box);
             }
-            if (this._destinationOfSheep == "down-right") {
+            if (this._destinationOfSheep === "down-right") {
                 this._destinationOfSheep = "up-right";
                 this.setX = (this.getX + box);
                 this.setY = (this.getY - box);
@@ -186,14 +186,14 @@ let dir;
 document.addEventListener("keydown", direction);
 
 function direction(event) {
-    if (event.keyCode == 37) dir = "left";
-    else if (event.keyCode == 38) dir = "up";
-    else if (event.keyCode == 39) dir = "right";
-    else if (event.keyCode == 40) dir = "down";
-    else if (event.keyCode == 65) dir = "left";
-    else if (event.keyCode == 87) dir = "up";
-    else if (event.keyCode == 68) dir = "right";
-    else if (event.keyCode == 83) dir = "down";
+    if (event.keyCode === 37) dir = "left";
+    else if (event.keyCode === 38) dir = "up";
+    else if (event.keyCode === 39) dir = "right";
+    else if (event.keyCode === 40) dir = "down";
+    else if (event.keyCode === 65) dir = "left";
+    else if (event.keyCode === 87) dir = "up";
+    else if (event.keyCode === 68) dir = "right";
+    else if (event.keyCode === 83) dir = "down";
 }
 
 const dialog = document.querySelector(".dialogWindow");
@@ -229,7 +229,7 @@ const secondSheep = new sheep();
 const thirdSheep = new sheep();
 const wolf = new hunter();
 
-function endGame() {
+function endGame(result) {
     if (counterOfGameOverSound == 1) {
         gameOver.play();
         counterOfGameOverSound--;
@@ -239,7 +239,7 @@ function endGame() {
     ctx.font = "60px 'Heebo', monospace";
     ctx.fillText("GAME OVER", box * 7.5, box * 10)
     ctx.font = "30px 'Heebo', monospace";
-    ctx.fillText("You lose!", box * 11, box * 11.5)
+    ctx.fillText(result === "lose" ? "You lose!" : "You win!", box * 11, box * 11.5);
 }
 
 
@@ -267,9 +267,9 @@ function drawGame() {
     ctx.fillText(Math.floor(((timeOfStart - Date.now()) / 1000)), box * 6, box * 2);
 
     if ((timeOfStart - Date.now()) <= 0)
-        endGame();
-    if (counterOfAliveSheeps == 0)
-        endGame();
+        endGame("lose");
+    if (counterOfAliveSheeps === 0)
+        endGame("win");
 
     for (let i = 0; i < arrayOfSheeps.length; i++) {
         if (arrayOfSheeps[i].checkCollisionsBetweenObjects(wolf)) {
@@ -296,19 +296,19 @@ function drawGame() {
     }
     let wolfX = wolf.getX;
     let wolfY = wolf.getY;
-    if (dir == "left") {
+    if (dir === "left") {
         wolfX -= box;
         wolf.setX = wolfX;
     }
-    if (dir == "right") {
+    if (dir === "right") {
         wolfX += box;
         wolf.setX = wolfX;
     }
-    if (dir == "up") {
+    if (dir === "up") {
         wolfY -= box;
         wolf.setY = wolfY;
     }
-    if (dir == "down") {
+    if (dir === "down") {
         wolfY += box;
         wolf.setY = wolfY;
     }
